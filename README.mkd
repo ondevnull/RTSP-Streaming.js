@@ -1,0 +1,18 @@
+RTSP Streaming.js
+=================
+
+This package uses FFmpeg to convert a RTSP streaming to a stale JPEG 
+image and with JavaScript this file is read at a frequency and sent
+through Socket.IO to the client so it read the `<img>` tag in the HTML
+as a `<video>` without needing a state-of-the-art browser.
+
+Thanks to Socket.IO cross-browser and cross-platform compatibility this
+can be used even for mobile clients.
+
+Author & Copyright
+------------------
+© 2011, Jose Luis Rivas `<joseluis@eserre.com>`, All Right Reserved.
+
+License
+-------
+This software is meant to be used only on the function given to the client, not any more, and the code or functioning of it must not be copied nor reverse-engineered. This is a license of limited-use.
