@@ -9,10 +9,42 @@ as a `<video>` without needing a state-of-the-art browser.
 Thanks to Socket.IO cross-browser and cross-platform compatibility this
 can be used even for mobile clients.
 
+How to install?
+---------------
+Install Node.JS and NPM:
+		\# aptitude install nodejs npm
+
+Then, install Socket.IO with NPM:
+		\# npm install socket.io
+
+This package requires FFmpeg, but Debian ships FFmpeg's fork Libav, so you should follow instructions on http://github.com/ghostbar/FFmpeg.deb, normally it should be:
+		$ git clone git://github.com/ghostbar/FFmpeg.deb.git
+		$ cd FFmpeg.deb/
+		$ git checkout -t -b pristine-tar origin/pristine-tar
+		$ git checkout -t -b upstream origin/upstream
+		$ git checkout master
+		$ git fetch --tags
+		\# aptitude install build-essential git-buildpackage libasound2-dev libbz2-dev libdc1394-22-dev libdirac-dev libfreetype6-dev libgsm1-dev libimlib2-dev libjack-dev libmp3lame-dev libopenjpeg-dev libraw1394-dev librtmp-dev libschroedinger-dev libsdl1.2-dev libspeex-dev libtheora-dev libtiff4-dev libva-dev libvdpau-dev libvorbis-dev libvpx-dev libx11-dev libx264-dev libxext-dev libxfixes-dev libxvidcore-dev libxvmc-dev texi2html yasm zlib1g-dev
+		$ DEB_BUILD_OPTIONS=parallel=4 git-buildpackage
+
+In `DEB_BUILD_OPTIONS` change `4` for the number of processors the system where you're compiling has, so it builds the package faster.
+
+If you are using Debian testing instead of unstable then you should skip the last step and do the following:
+		$ git checkout -t -b testing origin/testing
+		$ git-buildpackage --git-debian-branch=testing
+
+Alternatively, you can use `dpkg-checkbuilddeps` from `devscripts` debian package to check which build-dependencies are missing from your system, our just use a building chroot system like pbuilder or cowbuilder which should suffice the build-dependencies alone without filling your system with development libraries you may never need anymore.
+
+After the building completes, you will have a lot of files on `../`, you should install most of the files with a `.deb` extension, except the ones with <em>source</em>, <em>dbg</em> and <em>dev</em> on it's name.
+
+How to use?
+-----------
+TODO TODO TODO TODO TODO TODO TODO TODO
+
 Author & Copyright
 ------------------
 © 2011, Jose Luis Rivas `<joseluis@eserre.com>`, All Right Reserved.
 
 License
 -------
-This software is meant to be used only on the function given to the client, not any more, and the code or functioning of it must not be copied nor reverse-engineered. This is a license of limited-use.
+This software is meant to be used only on the function given to the client, not any way else, and the code or functioning of it must not be copied nor reverse-engineered. This is a license of limited-use.
