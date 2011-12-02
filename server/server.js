@@ -1,12 +1,12 @@
 /**
- * Variables for Socket.IO
+ * Variables for Socket.IO and HTTP server
  **/
 var	http = require('http').createServer(handler),
 		io = require('socket.io').listen(http),
 		fs = require('fs');
 
 // It will listen on port 8080 avoiding other HTTP server on the same IP
-http.listen(8080);
+http.listen(8081);
 
 /**
  * @name handler
