@@ -1,7 +1,7 @@
-var	util = require('util'),
-		exec = require('child_process').exec,
-		child,
-		http = require('http').createServer(handler),
+/**
+ * Variables for Socket.IO
+ **/
+var	http = require('http').createServer(handler),
 		io = require('socket.io').listen(http),
 		fs = require('fs');
 
@@ -23,7 +23,7 @@ function handler (req, res) {
       res.writeHead(500);
       return res.end('Error loading index.html');
     }
-
+		// Send data to the client
     res.writeHead(200,{'Content-Type':'text/html'});
     res.write(data,'utf8');
 		res.end();
@@ -31,16 +31,22 @@ function handler (req, res) {
 }
 
 /**
- * Call to FFmpeg
+ * Variables for FFmpeg
  **/
-var	input = 'rtsp://localhost:8999/0', // Input file or stream
+var util = require('util'),
+		exec = require('child_process').exec,
+		child,
+		input = 'rtsp://localhost:8999/0', // Input file or stream
 		rate = 30, // Video FPS rate.
 		quality = 'qvga', // Quality of the image
 		suffixout = 'camaraip', // Suffix for the JPEG output of FFmpeg
 		prefixout = '001',
 		outextension = 'jpg';
 
-child = exec('ffmpeg -i ' + input + ' -r ' + rate + ' -s qvga -f image2 -updatefirst 1 ' + prefixout + '_' + suffixout + '.' + outextension,
+/**
+ * Call to FFmpeg
+ **/
+child = exec('ffmpeg -i ' + input + ' -r ' + rate + ' -s qvga -f image2 -updatefirst 1 ' + __dirname + prefixout + '_' + suffixout + '.' + outextension,
 	function (error, stdout, stderr) {
     console.log('stdout: ' + stdout);
     console.log('stderr: ' + stderr);
@@ -65,3 +71,5 @@ var processImage = function(image,success) {
 	});
 	success(true);
 });
+
+
