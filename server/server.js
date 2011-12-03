@@ -1,11 +1,23 @@
 /**
+ * RTSP Streaming's server.js
+ * --------------------------
+ *  This script runs a server that fetchs stale images from a ffmpeg
+ *  output and sends it with Socket.IO to a client in a volatile-manner.
+ *
+ *  Requires: Node.js and Socket.IO.
+ *
+ * Created on: December 02, 2011.
+ * Copyright © 2011, Jose Luis Rivas. All Rights Reserved.
+ **/
+
+/**
  * Variables for Socket.IO and HTTP server
  **/
 var	http = require('http').createServer(handler),
 		io = require('socket.io').listen(http),
 		fs = require('fs');
 
-// It will listen on port 8080 avoiding other HTTP server on the same IP
+// It will listen on port 8081 avoiding other HTTP server on the same IP
 http.listen(8081);
 
 /**
@@ -71,5 +83,4 @@ var processImage = function(image,success) {
 	});
 	success(true);
 });
-
 
