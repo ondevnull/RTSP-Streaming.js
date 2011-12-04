@@ -51,6 +51,7 @@ var util = require('util'),
 		input = 'rtsp://192.168.1.217:554/0', // Input file or stream
 		rate = 30, // Video FPS rate.
 		quality = 'qvga', // Quality of the image
+		imgdir = 'img/', // Where JPGs are going to be stored
 		suffixout = 'camaraip', // Suffix for the JPEG output of FFmpeg
 		prefixout = '001',
 		outextension = 'jpg';
@@ -58,7 +59,7 @@ var util = require('util'),
 /**
  * Call to FFmpeg
  **/
-child = exec('ffmpeg -i ' + input + ' -r ' + rate + ' -s qvga -f image2 -updatefirst 1 ' + __dirname + prefixout + '_' + suffixout + '.' + outextension,
+child = exec('ffmpeg -i ' + input + ' -r ' + rate + ' -s qvga -f image2 -updatefirst 1 ' + __dirname + imgdir + prefixout + '_' + suffixout + '.' + outextension,
 	function (error, stdout, stderr) {
     console.log('stdout: ' + stdout);
     console.log('stderr: ' + stderr);
