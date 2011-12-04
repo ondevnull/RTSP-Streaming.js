@@ -4,7 +4,8 @@
  *  This script runs a server that fetchs stale images from a ffmpeg
  *  output and sends it with Socket.IO to a client in a volatile-manner.
  *
- *  Requires: Node.js and Socket.IO.
+ *  Requires: Node.js, Socket.IO and FFmpeg, but compiled with libmjpeg 
+ *  support and the last version from git-master tree.
  *
  * Created on: December 02, 2011.
  * Copyright © 2011, Jose Luis Rivas. All Rights Reserved.
