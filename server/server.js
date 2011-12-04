@@ -14,6 +14,7 @@
  * Variables for Socket.IO and HTTP server
  **/
 var	http = require('http').createServer(handler),
+		basedir = __dirname + '/../',
 		io = require('socket.io').listen(http),
 		fs = require('fs');
 
@@ -29,7 +30,7 @@ http.listen(8081);
  **/
 function handler (req, res) {
 	// It will read the HTML file for clients
-  fs.readFile(__dirname + '/client/index.html',
+  fs.readFile(basedir + '/client/index.html',
   function (err, data) {
     if (err) { // If something bad happens, then do:
       res.writeHead(500);
@@ -52,7 +53,6 @@ var util = require('util'),
 		input = '/home/ghostbar/shell-20110908-1.webm', // Local input file
 		rate = 30, // Video FPS rate.
 		quality = 'qvga', // Quality of the image
-		basedir = __dirname + '/../',
 		imgdir = 'img/', // Where JPGs are going to be stored
 		suffixout = 'camaraip', // Suffix for the JPEG output of FFmpeg
 		prefixout = '001',
@@ -104,6 +104,9 @@ fs.watch( basedir + imgdir,
 			 **/
 			if (filename) {
 				console.log('This is the filename: ' + filename);
+				if (filename == '001_camaraip.jpg') {
+					
+				}
 			} else { // Here it comes the error-catcher
 				console.log('stderr: ' + stderr);
 				if (error !== null) {
