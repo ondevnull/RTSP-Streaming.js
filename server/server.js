@@ -48,7 +48,7 @@ function handler (req, res) {
 var util = require('util'),
 		exec = require('child_process').exec,
 		child,
-		input = 'rtsp://localhost:8999/0', // Input file or stream
+		input = 'rtsp://192.168.1.217:554/0', // Input file or stream
 		rate = 30, // Video FPS rate.
 		quality = 'qvga', // Quality of the image
 		suffixout = 'camaraip', // Suffix for the JPEG output of FFmpeg
