@@ -48,7 +48,8 @@ function handler (req, res) {
 var util = require('util'),
 		exec = require('child_process').exec,
 		child,
-		input = 'rtsp://192.168.1.217:554/0', // Input file or stream
+//		input = 'rtsp://192.168.1.217:554/0', // Input file or stream
+		input = '/home/ghostbar/shell-20110908-1.webm', // Local input file
 		rate = 30, // Video FPS rate.
 		quality = 'qvga', // Quality of the image
 		imgdir = 'img/', // Where JPGs are going to be stored
@@ -76,6 +77,7 @@ child = exec('ffmpeg -i ' + input + ' -r ' + rate + ' -s qvga -f image2 -updatef
  * image: image to use
  * success: if the function is successful
  **/
+/*
 var processImage = function(image,success) {
 	io.broadcast ({
 		data: image.data.toString('base64'),
@@ -83,5 +85,29 @@ var processImage = function(image,success) {
 		height: image.height;
 	});
 	success(true);
-});
+}); */
 
+/**
+ * @name imageWatcher
+ * @desc Watchdog for any change on image files
+ * @params complete file path
+ **/
+console.log(__dirname + '/../' + imgdir);
+fs.watch( __dirname + '/../' + imgdir,
+		function (watchevent, filename) {
+			/**
+			 * fs.watch returns a FSWatcher object, which has 2 callback 
+			 * functions, `change` with event and filename as params; and
+			 * `error` with exception as param, so if there's no filename
+			 * param we send it to an error-catcher.
+			 **/
+			if (filename) {
+				console.log('This is the filename: ' + filename);
+			} else { // Here it comes the error-catcher
+				console.log('stderr: ' + stderr);
+				if (error !== null) {
+					// Print-out on log the exception
+					console.log('Watching files error: ' + watchevent);
+				}
+			}
+});
