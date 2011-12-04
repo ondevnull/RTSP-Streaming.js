@@ -8,9 +8,13 @@
 <body>
 	<script src="/socket.io/socket.io.js"></script>
 	<script>
-		var socket = io.connect('localhost', {port:8081});
+		var socket = io.connect('http://localhost', {port:8081});
+		socket.on('connect', function() {
+			socket.send('A client got connected to Socket.IO server');
+			console.log('You\'re connected to the streaming server');
+		});
 		socket.on('message', function (data) {
-			document.getElementById('imagevideo').src='data:image/jpg;base64,' + data.data);
+			document.getElementById('imagevideo').src='data:image/jpg;base64,' + data.data;
 		});
 	</script>
 
