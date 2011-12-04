@@ -52,6 +52,7 @@ var util = require('util'),
 		input = '/home/ghostbar/shell-20110908-1.webm', // Local input file
 		rate = 30, // Video FPS rate.
 		quality = 'qvga', // Quality of the image
+		basedir = __dirname + '/../',
 		imgdir = 'img/', // Where JPGs are going to be stored
 		suffixout = 'camaraip', // Suffix for the JPEG output of FFmpeg
 		prefixout = '001',
@@ -60,7 +61,7 @@ var util = require('util'),
 /**
  * Call to FFmpeg
  **/
-child = exec('ffmpeg -i ' + input + ' -r ' + rate + ' -s qvga -f image2 -updatefirst 1 ' + __dirname + imgdir + prefixout + '_' + suffixout + '.' + outextension,
+child = exec('ffmpeg -i ' + input + ' -r ' + rate + ' -s qvga -f image2 -updatefirst 1 ' + basedir + imgdir + prefixout + '_' + suffixout + '.' + outextension,
 	function (error, stdout, stderr) {
     console.log('stdout: ' + stdout);
     console.log('stderr: ' + stderr);
@@ -92,8 +93,8 @@ var processImage = function(image,success) {
  * @desc Watchdog for any change on image files
  * @params complete file path
  **/
-console.log(__dirname + '/../' + imgdir);
-fs.watch( __dirname + '/../' + imgdir,
+console.log( basedir + imgdir);
+fs.watch( basedir + imgdir,
 		function (watchevent, filename) {
 			/**
 			 * fs.watch returns a FSWatcher object, which has 2 callback 
