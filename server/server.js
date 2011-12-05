@@ -16,6 +16,7 @@
  **/
 var	http = require('http').createServer(handler),
 		basedir = __dirname + '/../',
+		imgdir = 'img/', // Where JPGs are going to be stored
 		io = require('socket.io').listen(http),
 		fs = require('fs');
 
@@ -66,44 +67,55 @@ function handler (req, res) {
   });
 }
 
+callFFmpeg( '/home/ghostbar/shell-20110908-1.webm', '001');
+
+var	rate = 4,
+		suffixout = 'camaraip',
+		outextension = 'jpg';
+
+function callFFmpeg (input002, prefixout001) {
+
 /**
  * Variables for FFmpeg
  **/
 var util = require('util'),
 		exec = require('child_process').exec,
 		child001, child002,
-		input001 = 'rtsp://admin:admin@192.168.1.217:554/0', // Input file or stream
-		input002 = '/home/ghostbar/shell-20110908-1.webm', // Local input file
+//		input001 = 'rtsp://admin:admin@192.168.1.217:554/0', // Input file or stream
+//		input002 = '/home/ghostbar/shell-20110908-1.webm', // Local input file
 		rate = 4, // Video FPS rate.
 		quality = 'vga', // Quality of the image
-		imgdir = 'img/', // Where JPGs are going to be stored
 		extraparams = '-b:v 32k',
 		suffixout = 'camaraip', // Suffix for the JPEG output of FFmpeg
-		prefixout001 = '001', prefixout002 = '002',
+//		prefixout001 = '001', prefixout002 = '002',
 		outextension = 'jpg';
 
 /**
  * Call to FFmpeg
  **/
-child001 = exec('ffmpeg -i ' + input001 + ' -r ' + rate + ' -s ' + quality + ' ' + extraparams + ' -f image2 -updatefirst 1 ' + basedir + imgdir + prefixout001 + '_' + suffixout + '.' + outextension,
+child001 = exec('ffmpeg -i ' + input002 + ' -r ' + rate + ' -s ' + quality + ' ' + extraparams + ' -f image2 -updatefirst 1 ' + basedir + imgdir + prefixout001 + '_' + suffixout + '.' + outextension,
 	function (error, stdout, stderr) {
     if (error !== null) {
       console.error('FFmpeg\'s 001 exec error: ' + error);
     }
 });
-
+}
 /**
  * Call to FFmpeg
  **/
+/*
 child002 = exec('ffmpeg -i ' + input002 + ' -r ' + rate + ' -s ' + quality + ' ' + extraparams + ' -f image2 -updatefirst 1 ' + basedir + imgdir + prefixout002 + '_' + suffixout + '.' + outextension,
 	function (error, stdout, stderr) {
     if (error !== null) {
       console.error('FFmpeg\'s 002 exec error: ' + error);
     }
 });
+*/
 
+callSocket('001');
 
-io.of('/001').on('connection', function (client) {
+function callSocket (cam) {
+io.of('/' + cam).on('connection', function (client) {
 	/**
 	 * @name imageWatcher
 	 * @desc Watchdog for any change on image files
@@ -112,7 +124,7 @@ io.of('/001').on('connection', function (client) {
 	var imgcount = 0;
 	console.log( basedir + imgdir);
 	setInterval( function() {
-		fs.readFile( basedir + imgdir + prefixout001 + '_' + suffixout + '.' + outextension,
+		fs.readFile( basedir + imgdir + cam + '_' + suffixout + '.' + outextension,
 			function(err, content) {
 				if (err) {
 					throw err;
@@ -126,14 +138,15 @@ io.of('/001').on('connection', function (client) {
 			});
 	}, 1000/rate);
 });
-
+}
+/*
 io.of('/002').on('connection', function (client) {
 	/**
 	 * @name imageWatcher
 	 * @desc Watchdog for any change on image files
 	 * @params complete file path
 	 **/
-	var imgcount = 0;
+/*	var imgcount = 0;
 	console.log( basedir + imgdir);
 	setInterval( function() {
 		fs.readFile( basedir + imgdir + prefixout002 + '_' + suffixout + '.' + outextension,
@@ -149,4 +162,4 @@ io.of('/002').on('connection', function (client) {
 				}
 			});
 	}, 1000/rate);
-});
+}); */
