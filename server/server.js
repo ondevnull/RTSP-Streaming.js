@@ -23,6 +23,28 @@ var	http = require('http').createServer(handler),
 http.listen(8081);
 
 /**
+ * Configuring Socket.IO
+ **/
+io.configure('prod', function(){
+	io.enable('browser client minification');
+	io.enable('browser client etag');
+	io.enable('browser client gzip');
+  io.set('log level', 1);
+
+  io.set('transports', [
+    'websocket'
+  , 'flashsocket'
+  , 'htmlfile'
+  , 'xhr-polling'
+  , 'jsonp-polling'
+  ]);
+});
+
+io.configure('dev', function(){
+  io.set('transports', ['websocket']);
+});
+
+/**
  * @name handler
  * @desc Handler of HTTP requests (HTTP server)
  * @params
@@ -49,48 +71,28 @@ function handler (req, res) {
  **/
 var util = require('util'),
 		exec = require('child_process').exec,
-		child,
-		input = 'rtsp://admin:admin@192.168.1.217:554/0', // Input file or stream
+		child001,
+		input001 = 'rtsp://admin:admin@192.168.1.217:554/0', // Input file or stream
 //		input = '/home/ghostbar/shell-20110908-1.webm', // Local input file
 		rate = 4, // Video FPS rate.
 		quality = 'svga', // Quality of the image
 		imgdir = 'img/', // Where JPGs are going to be stored
 		extraparams = '-b:v 32k',
 		suffixout = 'camaraip', // Suffix for the JPEG output of FFmpeg
-		prefixout = '001',
+		prefixout001 = '001',
 		outextension = 'jpg';
 
 /**
  * Call to FFmpeg
  **/
-child = exec('ffmpeg -i ' + input + ' -r ' + rate + ' -s ' + quality + ' ' + extraparams + ' -f image2 -updatefirst 1 ' + basedir + imgdir + prefixout + '_' + suffixout + '.' + outextension,
+child001 = exec('ffmpeg -i ' + input001 + ' -r ' + rate + ' -s ' + quality + ' ' + extraparams + ' -f image2 -updatefirst 1 ' + basedir + imgdir + prefixout001 + '_' + suffixout + '.' + outextension,
 	function (error, stdout, stderr) {
     if (error !== null) {
       console.error('FFmpeg\'s exec error: ' + error);
     }
 });
 
-/**
- * @name processImage
- * @desc Process Images for converting to base64 and passing along
- * with Socket.IO
- * @params
- * image: image to use
- * success: if the function is successful
- **/
-/*
-var processImage = function(image,success) {
-	io.broadcast ({
-		data: image.data.toString('base64'),
-		width: image.width,
-		height: image.height;
-	});
-	success(true);
-}); */
-
-
 io.sockets.on('connection', function (client) {
-	
 	/**
 	 * @name imageWatcher
 	 * @desc Watchdog for any change on image files
@@ -99,7 +101,7 @@ io.sockets.on('connection', function (client) {
 	var imgcount = 0;
 	console.log( basedir + imgdir);
 	setInterval( function() {
-		fs.readFile( basedir + imgdir + prefixout + '_' + suffixout + '.' + outextension,
+		fs.readFile( basedir + imgdir + prefixout001 + '_' + suffixout + '.' + outextension,
 			function(err, content) {
 				if (err) {
 					throw err;
@@ -112,5 +114,4 @@ io.sockets.on('connection', function (client) {
 				}
 			});
 	}, 1000/rate);
-
 });
