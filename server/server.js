@@ -73,44 +73,31 @@ var	rate = 4,
 		suffixout = 'camaraip',
 		outextension = 'jpg';
 
-function callFFmpeg (input002, prefixout001) {
+function callFFmpeg (input, prefixout) {
 
-/**
- * Variables for FFmpeg
- **/
-var util = require('util'),
-		exec = require('child_process').exec,
-		child001, child002,
-//		input001 = 'rtsp://admin:admin@192.168.1.217:554/0', // Input file or stream
-//		input002 = '/home/ghostbar/shell-20110908-1.webm', // Local input file
-		rate = 4, // Video FPS rate.
-		quality = 'vga', // Quality of the image
-		extraparams = '-b:v 32k',
-		suffixout = 'camaraip', // Suffix for the JPEG output of FFmpeg
-//		prefixout001 = '001', prefixout002 = '002',
-		outextension = 'jpg';
+	/**
+	 * Variables for FFmpeg
+	 **/
+	var util = require('util'),
+			exec = require('child_process').exec,
+			child,
+			rate = 4, // Video FPS rate.
+			quality = 'vga', // Quality of the image
+			extraparams = '-b:v 32k',
+			suffixout = 'camaraip', // Suffix for the JPEG output of FFmpeg
+	//		prefixout001 = '001', prefixout002 = '002',
+			outextension = 'jpg';
 
-/**
- * Call to FFmpeg
- **/
-child001 = exec('ffmpeg -i ' + input002 + ' -r ' + rate + ' -s ' + quality + ' ' + extraparams + ' -f image2 -updatefirst 1 ' + basedir + imgdir + prefixout001 + '_' + suffixout + '.' + outextension,
-	function (error, stdout, stderr) {
-    if (error !== null) {
-      console.error('FFmpeg\'s 001 exec error: ' + error);
-    }
-});
+	/**
+	 * Call to FFmpeg
+	 **/
+	child = exec('ffmpeg -i ' + input + ' -r ' + rate + ' -s ' + quality + ' ' + extraparams + ' -f image2 -updatefirst 1 ' + basedir + imgdir + prefixout + '_' + suffixout + '.' + outextension,
+		function (error, stdout, stderr) {
+			if (error !== null) {
+				console.error('FFmpeg\'s 001 exec error: ' + error);
+			}
+	});
 }
-/**
- * Call to FFmpeg
- **/
-/*
-child002 = exec('ffmpeg -i ' + input002 + ' -r ' + rate + ' -s ' + quality + ' ' + extraparams + ' -f image2 -updatefirst 1 ' + basedir + imgdir + prefixout002 + '_' + suffixout + '.' + outextension,
-	function (error, stdout, stderr) {
-    if (error !== null) {
-      console.error('FFmpeg\'s 002 exec error: ' + error);
-    }
-});
-*/
 
 callSocket('001');
 
@@ -139,27 +126,4 @@ io.of('/' + cam).on('connection', function (client) {
 	}, 1000/rate);
 });
 }
-/*
-io.of('/002').on('connection', function (client) {
-	/**
-	 * @name imageWatcher
-	 * @desc Watchdog for any change on image files
-	 * @params complete file path
-	 **/
-/*	var imgcount = 0;
-	console.log( basedir + imgdir);
-	setInterval( function() {
-		fs.readFile( basedir + imgdir + prefixout002 + '_' + suffixout + '.' + outextension,
-			function(err, content) {
-				if (err) {
-					throw err;
-				} else {
-					++imgcount;
-					console.log( 'Transformation #' + imgcount);
-					client.volatile.emit('message', {
-						data: content.toString('base64')
-					});
-				}
-			});
-	}, 1000/rate);
-}); */
+
