@@ -50,10 +50,10 @@ function handler (req, res) {
 var util = require('util'),
 		exec = require('child_process').exec,
 		child,
-//		input = 'rtsp://192.168.1.217:554/0', // Input file or stream
-		input = 'rtsp://admin:admin@192.168.1.217/0', // Local input file
-		rate = 20, // Video FPS rate.
-		quality = 'qvga', // Quality of the image
+		input = 'rtsp://admin:admin@192.168.1.217:554/0', // Input file or stream
+//		input = '/home/ghostbar/shell-20110908-1.webm', // Local input file
+		rate = 4, // Video FPS rate.
+		quality = 'svga', // Quality of the image
 		imgdir = 'img/', // Where JPGs are going to be stored
 		extraparams = '-b:v 32k',
 		suffixout = 'camaraip', // Suffix for the JPEG output of FFmpeg
@@ -63,7 +63,7 @@ var util = require('util'),
 /**
  * Call to FFmpeg
  **/
-child = exec('ffmpeg -i ' + input + ' -r ' + rate + ' -s qvga ' + extraparams + ' -f image2 -updatefirst 1 ' + basedir + imgdir + prefixout + '_' + suffixout + '.' + outextension,
+child = exec('ffmpeg -i ' + input + ' -r ' + rate + ' -s ' + quality + ' ' + extraparams + ' -f image2 -updatefirst 1 ' + basedir + imgdir + prefixout + '_' + suffixout + '.' + outextension,
 	function (error, stdout, stderr) {
     if (error !== null) {
       console.error('FFmpeg\'s exec error: ' + error);
@@ -98,34 +98,19 @@ io.sockets.on('connection', function (client) {
 	 **/
 	var imgcount = 0;
 	console.log( basedir + imgdir);
-	fs.watch( basedir + imgdir,
-			function (watchevent, filename) {
-				/**
-				 * fs.watch returns a FSWatcher object, which has 2 callback 
-				 * functions, `change` with event and filename as params; and
-				 * `error` with exception as param, so if there's no filename
-				 * param we send it to an error-catcher.
-				 **/
-				if (filename) {
-					fs.readFile( basedir + imgdir + filename,
-						function(err, content) {
-							if (err) {
-								throw err;
-							} else {
-								++imgcount;
-								console.log( 'Transformation #' + imgcount);
-								client.volatile.emit('message', {
-									data: content.toString('base64')
-								});
-							}
-						});
-				} else { // Here it comes the error-catcher
-					console.warn(stderr);
-					if (error !== null) {
-						// Print-out on log the exception
-						console.error('Watching files error: ' + watchevent);
-					}
+	setInterval( function() {
+		fs.readFile( basedir + imgdir + prefixout + '_' + suffixout + '.' + outextension,
+			function(err, content) {
+				if (err) {
+					throw err;
+				} else {
+					++imgcount;
+					console.log( 'Transformation #' + imgcount);
+					client.volatile.emit('message', {
+						data: content.toString('base64')
+					});
 				}
-	});
+			});
+	}, 1000/rate);
 
 });
