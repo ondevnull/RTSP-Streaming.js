@@ -8,17 +8,24 @@
 <body>
 	<script src="/socket.io/socket.io.js"></script>
 	<script>
-		var socket = io.connect('http://localhost', {port:8081});
-		socket.on('connect', function() {
-			socket.send('A client got connected to Socket.IO server');
+		var cam001 = io.connect('http://localhost/001', {port:8081}),
+				cam002 = io.connect('http://localhost/002', {port:8081});
+		cam001.on('connect', function() {
 			console.log('You\'re connected to the streaming server');
 		});
-		socket.on('message', function (data) {
+		cam001.on('message', function (data) {
 			document.getElementById('imagevideo').src='data:image/jpg;base64,' + data.data;
+		});
+		cam002.on('connect', function() {
+			console.log('You\'re connected to cam002');
+		});
+		cam002.on('message', function (data) {
+			document.getElementById('imagetwovideo').src='data:image/jpg;base64,' + data.data;
 		});
 	</script>
 
 	<img id="imagevideo" src="#">
+	<img id="imagetwovideo" src="#">
 </body>
 </html>
 

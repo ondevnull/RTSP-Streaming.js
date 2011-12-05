@@ -71,15 +71,15 @@ function handler (req, res) {
  **/
 var util = require('util'),
 		exec = require('child_process').exec,
-		child001,
+		child001, child002,
 		input001 = 'rtsp://admin:admin@192.168.1.217:554/0', // Input file or stream
-//		input = '/home/ghostbar/shell-20110908-1.webm', // Local input file
+		input002 = '/home/ghostbar/shell-20110908-1.webm', // Local input file
 		rate = 4, // Video FPS rate.
-		quality = 'svga', // Quality of the image
+		quality = 'vga', // Quality of the image
 		imgdir = 'img/', // Where JPGs are going to be stored
 		extraparams = '-b:v 32k',
 		suffixout = 'camaraip', // Suffix for the JPEG output of FFmpeg
-		prefixout001 = '001',
+		prefixout001 = '001', prefixout002 = '002',
 		outextension = 'jpg';
 
 /**
@@ -88,11 +88,22 @@ var util = require('util'),
 child001 = exec('ffmpeg -i ' + input001 + ' -r ' + rate + ' -s ' + quality + ' ' + extraparams + ' -f image2 -updatefirst 1 ' + basedir + imgdir + prefixout001 + '_' + suffixout + '.' + outextension,
 	function (error, stdout, stderr) {
     if (error !== null) {
-      console.error('FFmpeg\'s exec error: ' + error);
+      console.error('FFmpeg\'s 001 exec error: ' + error);
     }
 });
 
-io.sockets.on('connection', function (client) {
+/**
+ * Call to FFmpeg
+ **/
+child002 = exec('ffmpeg -i ' + input002 + ' -r ' + rate + ' -s ' + quality + ' ' + extraparams + ' -f image2 -updatefirst 1 ' + basedir + imgdir + prefixout002 + '_' + suffixout + '.' + outextension,
+	function (error, stdout, stderr) {
+    if (error !== null) {
+      console.error('FFmpeg\'s 002 exec error: ' + error);
+    }
+});
+
+
+io.of('/001').on('connection', function (client) {
 	/**
 	 * @name imageWatcher
 	 * @desc Watchdog for any change on image files
@@ -102,6 +113,30 @@ io.sockets.on('connection', function (client) {
 	console.log( basedir + imgdir);
 	setInterval( function() {
 		fs.readFile( basedir + imgdir + prefixout001 + '_' + suffixout + '.' + outextension,
+			function(err, content) {
+				if (err) {
+					throw err;
+				} else {
+					++imgcount;
+					console.log( 'Transformation #' + imgcount);
+					client.volatile.emit('message', {
+						data: content.toString('base64')
+					});
+				}
+			});
+	}, 1000/rate);
+});
+
+io.of('/002').on('connection', function (client) {
+	/**
+	 * @name imageWatcher
+	 * @desc Watchdog for any change on image files
+	 * @params complete file path
+	 **/
+	var imgcount = 0;
+	console.log( basedir + imgdir);
+	setInterval( function() {
+		fs.readFile( basedir + imgdir + prefixout002 + '_' + suffixout + '.' + outextension,
 			function(err, content) {
 				if (err) {
 					throw err;
