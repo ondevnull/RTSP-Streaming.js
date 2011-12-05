@@ -51,10 +51,11 @@ var util = require('util'),
 		exec = require('child_process').exec,
 		child,
 //		input = 'rtsp://192.168.1.217:554/0', // Input file or stream
-		input = '/home/ghostbar/shell-20110908-1.webm', // Local input file
-		rate = 5, // Video FPS rate.
+		input = 'rtsp://admin:admin@192.168.1.217/0', // Local input file
+		rate = 20, // Video FPS rate.
 		quality = 'qvga', // Quality of the image
 		imgdir = 'img/', // Where JPGs are going to be stored
+		extraparams = '-b:v 32k',
 		suffixout = 'camaraip', // Suffix for the JPEG output of FFmpeg
 		prefixout = '001',
 		outextension = 'jpg';
@@ -62,7 +63,7 @@ var util = require('util'),
 /**
  * Call to FFmpeg
  **/
-child = exec('ffmpeg -i ' + input + ' -r ' + rate + ' -s qvga -f image2 -updatefirst 1 ' + basedir + imgdir + prefixout + '_' + suffixout + '.' + outextension,
+child = exec('ffmpeg -i ' + input + ' -r ' + rate + ' -s qvga ' + extraparams + ' -f image2 -updatefirst 1 ' + basedir + imgdir + prefixout + '_' + suffixout + '.' + outextension,
 	function (error, stdout, stderr) {
     if (error !== null) {
       console.error('FFmpeg\'s exec error: ' + error);
