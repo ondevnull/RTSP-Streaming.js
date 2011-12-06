@@ -67,7 +67,7 @@ function handler (req, res) {
   });
 }
 
-callFFmpeg( '/home/ghostbar/shell-20110908-1.webm', '001');
+callFFmpeg('rtsp://admin:admin@192.168.1.217/0', '001');
 
 var	rate = 4,
 		suffixout = 'camaraip',
@@ -94,7 +94,7 @@ function callFFmpeg (input, prefixout) {
 	child = exec('ffmpeg -i ' + input + ' -r ' + rate + ' -s ' + quality + ' ' + extraparams + ' -f image2 -updatefirst 1 ' + basedir + imgdir + prefixout + '_' + suffixout + '.' + outextension,
 		function (error, stdout, stderr) {
 			if (error !== null) {
-				console.error('FFmpeg\'s 001 exec error: ' + error);
+				console.error('FFmpeg\'s ' + prefixout + ' exec error: ' + error);
 			}
 	});
 }
