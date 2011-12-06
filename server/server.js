@@ -21,7 +21,7 @@ var	http = require('http').createServer(handler),
 		fs = require('fs');
 
 // It will listen on port 8081 avoiding other HTTP server on the same IP
-http.listen(8081);
+http.listen(8082);
 
 /**
  * Configuring Socket.IO
@@ -95,7 +95,7 @@ function callFFmpeg (input, prefixout) {
 	child = exec('ffmpeg -i ' + input + ' -r ' + rate + ' -s ' + quality + ' ' + extraparams + ' -f image2 -updatefirst 1 ' + basedir + imgdir + prefixout + '_' + suffixout + '.' + outextension,
 		function (error, stdout, stderr) {
 			if (error !== null) {
-				console.error('FFmpeg\'s 001 exec error: ' + error);
+				console.error('FFmpeg\'s ' + prefixout + ' exec error: ' + error);
 			}
 	});
 }
