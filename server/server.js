@@ -67,7 +67,8 @@ function handler (req, res) {
   });
 }
 
-callFFmpeg( '/home/ghostbar/shell-20110908-1.webm', '001');
+callFFmpeg( 'rtsp://admin:admin@192.168.71.23/0', '001');
+//callFFmpeg( 'rtsp://admin:admin@192.168.71.24/0', '002');
 
 var	rate = 4,
 		suffixout = 'camaraip',
@@ -82,7 +83,7 @@ function callFFmpeg (input, prefixout) {
 			exec = require('child_process').exec,
 			child,
 			rate = 4, // Video FPS rate.
-			quality = 'vga', // Quality of the image
+			quality = 'qvga', // Quality of the image
 			extraparams = '-b:v 32k',
 			suffixout = 'camaraip', // Suffix for the JPEG output of FFmpeg
 	//		prefixout001 = '001', prefixout002 = '002',
@@ -100,6 +101,7 @@ function callFFmpeg (input, prefixout) {
 }
 
 callSocket('001');
+//callSocket('002');
 
 function callSocket (cam) {
 io.of('/' + cam).on('connection', function (client) {

@@ -8,8 +8,8 @@
 <body>
 	<script src="/socket.io/socket.io.js"></script>
 	<script>
-		var cam001 = io.connect('http://localhost/001', {port:8081}),
-				cam002 = io.connect('http://localhost/002', {port:8081});
+		var cam001 = io.connect('http://bqm.sts.net.ve/001', {port:8081}),
+				cam002 = io.connect('http://bqm.sts.net.ve/002', {port:8081});
 		cam001.on('connect', function() {
 			console.log('You\'re connected to the streaming server');
 		});
