@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+	<title>Index</title>
+</head>
+<body>
+
+	<img id="anyvideo" src="#">
+	<script>
+		function reload (url, element) {
+			var random = "?" + Math.random();
+			console.log('/'+url+random);
+			console.log(element);
+			document.getElementById(element).src='/'+url+random;
+			setTimeout( reload(url,element), 250);
+		}
+		
+		setTimeout( reload('001_camaraip.jpg', 'anyvideo'), 250);
+	</script>
+
+</body>
+</html>
