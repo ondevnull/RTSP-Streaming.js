@@ -9,15 +9,16 @@
 
 	<img id="anyvideo" src="#">
 	<script>
+		var counter = 0;
 		function reload (url, element) {
 			var random = "?" + Math.random();
-			console.log('/'+url+random);
-			console.log(element);
+			console.log('/' + url + random);
+			console.log(element); counter++;
+			console.log('#'+counter);
 			document.getElementById(element).src='/'+url+random;
-			setTimeout( reload(url,element), 250);
 		}
 		
-		setTimeout( reload('001_camaraip.jpg', 'anyvideo'), 250);
+		setInterval( "reload('001_camaraip.jpg', 'anyvideo')", 250);
 	</script>
 
 </body>
