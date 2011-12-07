@@ -14,11 +14,73 @@
 /**
  * Variables for Socket.IO and HTTP server
  **/
-var	http = require('http').createServer(handler),
+var	http = require('express').createServer(),
+		passport = require('passport'),
+		DigestStrategy = require('passport-http').DigestStrategy;
 		basedir = __dirname + '/../',
 		imgdir = 'img/', // Where JPGs are going to be stored
 		io = require('socket.io').listen(http),
-		fs = require('fs');
+		fs = require('fs'),
+		path = require('path');
+
+/**
+ * Users for the system
+ **/
+var users = [
+		{ id: 1, username: 'jorge', password: 'unacontraseñamuyfuerte'},
+		{ id: 2, username: 'alcaldiairibarren', password: 'amaliasaez'},
+		{ id: 3, username: 'desur', password: 'briceño'},
+		{ id: 4, username: 'sts', password: 'sin contraseña'}
+];
+
+function findByUsername(username, fn) {
+  for (var i = 0, len = users.length; i < len; i++) {
+    var user = users[i];
+    if (user.username === username) {
+      return fn(null, user);
+    }
+  }
+  return fn(null, null);
+}
+
+// Use the DigestStrategy within Passport.
+//   This strategy requires a `secret`function, which is used to look up the
+//   password known to both the client and server.  Also required is a
+//   `validate` function, which accepts credentials (in this case, a username
+//   and nonce-related options), and invokes a callback with a user object.
+passport.use(new DigestStrategy({ qop: 'auth' },
+  function(username, done) {
+    // Find the user by username.  If there is no user with the given username
+    // set the user to `false` to indicate failure.  Otherwise, return the
+    // user's password.
+    findByUsername(username, function(err, user) {
+      if (err) { return done(err); }
+      if (!user) { return done(null, false); }
+      return done(null, user.password);
+    })
+  },
+  function(username, options, done) {
+    // asynchronous validation, for effect...
+    process.nextTick(function () {
+      
+      // Find the user by username.  If there is no user with the given
+      // username, set the user to `false` to indicate failure.  Otherwise,
+      // return the authenticated `user`.
+      findByUsername(username, function(err, user) {
+        if (err) { return done(err); }
+        if (!user) { return done(null, false); }
+        return done(null, user);
+      })
+    });
+  }
+));
+
+/**
+ * Configuring Express middleware
+ **/
+http.configure(function() {
+	http.use(passport.initialize());
+});
 
 // It will listen on port 8081 avoiding other HTTP server on the same IP
 http.listen(8081);
@@ -46,27 +108,16 @@ io.configure('dev', function(){
 });
 
 /**
- * @name handler
- * @desc Handler of HTTP requests (HTTP server)
- * @params
- * req: the request made by the browser.
- * res: the response sent by the function to the browser.
+ * Request manager from Express, using authentication with passport-http to send
+ * client/index.html
  **/
-function handler (req, res) {
-	// It will read the HTML file for clients
-  fs.readFile(basedir + '/client/index.html',
-  function (err, data) {
-    if (err) { // If something bad happens, then do:
-      res.writeHead(500);
-      return res.end('Error loading index.html');
-    }
-		// Send data to the client
-    res.writeHead(200,{'Content-Type':'text/html'});
-    res.write(data,'utf8');
-		res.end();
-  });
-}
+http.get('/', passport.authenticate('digest', { session: false }), function (req, res) {
+	res.sendfile(path.normalize(basedir) + '/client/index.html');
+});
 
+/**
+ * Calls to run FFmpeg conversion from RTSP to static-JPG
+ **/
 callFFmpeg( 'rtsp://admin:admin@192.168.71.22/0', '001');
 callFFmpeg( 'rtsp://admin:admin@192.168.71.23/0', '002');
 callFFmpeg( 'rtsp://admin:admin@192.168.71.24/0', '003');
@@ -102,6 +153,9 @@ function callFFmpeg (input, prefixout) {
 	});
 }
 
+/**
+ * Calling function `callSocket` to get Socket.IO running
+ **/
 callSocket('001');
 callSocket('002');
 callSocket('003');
@@ -114,7 +168,7 @@ io.of('/' + cam).on('connection', function (client) {
 	 * @desc Watchdog for any change on image files
 	 * @params complete file path
 	 **/
-	var imgcount = 0;
+//	var imgcount = 0;
 	console.log( basedir + imgdir);
 	setInterval( function() {
 		fs.readFile( basedir + imgdir + cam + '_' + suffixout + '.' + outextension,
@@ -122,8 +176,8 @@ io.of('/' + cam).on('connection', function (client) {
 				if (err) {
 					throw err;
 				} else {
-					++imgcount;
-					console.log( 'Transformation #' + imgcount);
+//					++imgcount;
+//					console.log( 'Transformation #' + imgcount);
 					client.volatile.emit('message', {
 						data: content.toString('base64')
 					});
