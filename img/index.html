@@ -7,7 +7,10 @@
 </head>
 <body>
 
-	<img id="anyvideo" src="#">
+	<img id="camera001" src="#">
+	<img id="camera002" src="#">
+	<img id="camera003" src="#">
+	<img id="camera004" src="#">
 	<script>
 		var counter = 0;
 		function reload (url, element) {
@@ -15,10 +18,13 @@
 			console.log('/' + url + random);
 			console.log(element); counter++;
 			console.log('#'+counter);
-			document.getElementById(element).src='/'+url+random;
+			document.getElementById(element).src='/' + url + random;
 		}
 		
-		setInterval( "reload('001_camaraip.jpg', 'anyvideo')", 250);
+		setInterval( "reload('001_camaraip.jpg', 'camera001')", 250);
+		setInterval( "reload('002_camaraip.jpg', 'camera002')", 250);
+		setInterval( "reload('003_camaraip.jpg', 'camera003')", 250);
+		setInterval( "reload('004_camaraip.jpg', 'camera004')", 250);
 	</script>
 
 </body>

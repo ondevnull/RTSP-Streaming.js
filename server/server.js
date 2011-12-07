@@ -67,8 +67,10 @@ function handler (req, res) {
   });
 }
 
-callFFmpeg( 'rtsp://admin:admin@192.168.71.23/0', '001');
-//callFFmpeg( 'rtsp://admin:admin@192.168.71.24/0', '002');
+callFFmpeg( 'rtsp://admin:admin@192.168.71.22/0', '001');
+callFFmpeg( 'rtsp://admin:admin@192.168.71.23/0', '002');
+callFFmpeg( 'rtsp://admin:admin@192.168.71.24/0', '003');
+callFFmpeg( 'rtsp://admin:admin@192.168.71.25/0', '004');
 
 var	rate = 4,
 		suffixout = 'camaraip',
@@ -101,7 +103,9 @@ function callFFmpeg (input, prefixout) {
 }
 
 callSocket('001');
-//callSocket('002');
+callSocket('002');
+callSocket('003');
+callSocket('004');
 
 function callSocket (cam) {
 io.of('/' + cam).on('connection', function (client) {
