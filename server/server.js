@@ -21,7 +21,7 @@ var	http = require('http').createServer(handler),
 		fs = require('fs');
 
 // It will listen on port 8081 avoiding other HTTP server on the same IP
-http.listen(8082);
+http.listen(8081);
 
 /**
  * Configuring Socket.IO

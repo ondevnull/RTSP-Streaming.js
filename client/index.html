@@ -2,30 +2,56 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
 
-	<title>Index</title>
-	
+	<title>Alcaldía de Iribarren</title>
+	<style type="text/css" media="screen">
+		header {
+			height: 41px;
+			background: url('http://www.alcaldiadebarquisimeto.gob.ve/templates/alcaldia_Iribarren/images/topgob.png');
+		}
+		body { text-align: center; }
+	</style>
 </head>
 <body>
 	<script src="/socket.io/socket.io.js"></script>
 	<script>
 		var cam001 = io.connect('http://bqm.sts.net.ve/001', {port:8081}),
-				cam002 = io.connect('http://bqm.sts.net.ve/002', {port:8081});
+				cam002 = io.connect('http://bqm.sts.net.ve/002', {port:8081}),
+				cam003 = io.connect('http://bqm.sts.net.ve/003', {port:8081}),
+				cam004 = io.connect('http://bqm.sts.net.ve/004', {port:8081});
 		cam001.on('connect', function() {
 			console.log('You\'re connected to the streaming server');
 		});
 		cam001.on('message', function (data) {
-			document.getElementById('imagevideo').src='data:image/jpg;base64,' + data.data;
+			document.getElementById('camera001').src='data:image/jpg;base64,' + data.data;
 		});
 		cam002.on('connect', function() {
 			console.log('You\'re connected to cam002');
 		});
 		cam002.on('message', function (data) {
-			document.getElementById('imagetwovideo').src='data:image/jpg;base64,' + data.data;
+			document.getElementById('camera002').src='data:image/jpg;base64,' + data.data;
+		});
+		cam003.on('connect', function() {
+			console.log('You\'re connected to cam003');
+		});
+		cam003.on('message', function (data) {
+			document.getElementById('camera003').src='data:image/jpg;base64,' + data.data;
+		});
+		cam004.on('connect', function() {
+			console.log('You\'re connected to cam004');
+		});
+		cam004.on('message', function (data) {
+			document.getElementById('camera004').src='data:image/jpg;base64,' + data.data;
 		});
 	</script>
+	<header> </header>
+	<section id="main">
+		<h1>Sistema de Monitoreo Vial</h1>
 
-	<img id="imagevideo" src="#">
-	<img id="imagetwovideo" src="#">
+		<img id="camera001" src="#">
+		<img id="camera002" src="#"><br>
+		<img id="camera003" src="#">
+		<img id="camera004" src="#">
+</section><!-- #main -->
 </body>
 </html>
 
