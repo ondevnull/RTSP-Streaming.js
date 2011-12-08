@@ -27,8 +27,11 @@ var	http = require('express').createServer(),
  * Users for the system
  **/
 var users = [
-    { id: 1, username: 'alcaldia', password: 'amalia saez', email: 'bob@example.com' }
-  , { id: 2, username: 'desur', password: 'cedeño', email: 'joe@example.com' }
+    { username: 'alcaldia', password: 'amalia saez'}
+  , { username: 'desur', password: 'cedeno'}
+	, { username: 'jorge', password: 'una contrasena muy fuerte'}
+	, { username: 'sts', password: 'sin contrasena'}
+	, { username: 'amtt', password: 'amtt'}
 ];
 
 function findByUsername(username, fn) {
