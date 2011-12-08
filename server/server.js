@@ -27,10 +27,8 @@ var	http = require('express').createServer(),
  * Users for the system
  **/
 var users = [
-		{ id: 1, username: 'jorge', password: 'unacontraseñamuyfuerte'},
-		{ id: 2, username: 'alcaldiairibarren', password: 'amaliasaez'},
-		{ id: 3, username: 'desur', password: 'briceño'},
-		{ id: 4, username: 'sts', password: 'sin contraseña'}
+    { id: 1, username: 'alcaldia', password: 'amalia saez', email: 'bob@example.com' }
+  , { id: 2, username: 'desur', password: 'cedeño', email: 'joe@example.com' }
 ];
 
 function findByUsername(username, fn) {
@@ -42,6 +40,7 @@ function findByUsername(username, fn) {
   }
   return fn(null, null);
 }
+
 
 // Use the DigestStrategy within Passport.
 //   This strategy requires a `secret`function, which is used to look up the
@@ -113,6 +112,12 @@ io.configure('dev', function(){
  **/
 http.get('/', passport.authenticate('digest', { session: false }), function (req, res) {
 	res.sendfile(path.normalize(basedir) + '/client/index.html');
+});
+http.get('/iribarren.jpg', function (req, res) {
+	res.sendfile(path.normalize(basedir) + '/client/iribarren.jpg');
+});
+http.get('/amtt.png', function(req, res) {
+	res.sendfile(path.normalize(basedir) + '/client/amtt.png');
 });
 
 /**

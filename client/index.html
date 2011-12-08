@@ -4,11 +4,14 @@
 
 	<title>Alcaldía de Iribarren</title>
 	<style type="text/css" media="screen">
-		header {
+		header { height: 175px; }
+		footer {
 			height: 41px;
 			background: url('http://www.alcaldiadebarquisimeto.gob.ve/templates/alcaldia_Iribarren/images/topgob.png');
 		}
 		body { text-align: center; }
+		h1 { font-size: 36px; }
+		h2 { font-size: 22px; }
 	</style>
 </head>
 <body>
@@ -43,15 +46,17 @@
 			document.getElementById('camera004').src='data:image/jpg;base64,' + data.data;
 		});
 	</script>
-	<header> </header>
+	<header><img src="/iribarren.jpg" align="left"> <img src="/amtt.png" align="right"> </header>
 	<section id="main">
 		<h1>Sistema de Monitoreo Vial</h1>
+		<h2>Intersección Av. Venezuela con Av. Bracamonte</h2>
 
 		<img id="camera001" src="#">
 		<img id="camera002" src="#"><br>
 		<img id="camera003" src="#">
 		<img id="camera004" src="#">
-</section><!-- #main -->
+	</section><!-- #main -->
+	<footer> </footer>
 </body>
 </html>
 
