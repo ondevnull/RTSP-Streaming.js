@@ -124,25 +124,45 @@ http.get('/amtt.png', function(req, res) {
 });
 
 /**
- * Calls to run FFmpeg conversion from RTSP to static-JPG
+ * Declaring inputs and outputs for the cameras
  **/
-callFFmpeg( 'rtsp://admin:admin@192.168.71.22/0', '001');
-callFFmpeg( 'rtsp://admin:admin@192.168.71.23/0', '002');
-callFFmpeg( 'rtsp://admin:admin@192.168.71.24/0', '003');
-callFFmpeg( 'rtsp://admin:admin@192.168.71.25/0', '004');
+var inputs = [
+	"rtsp://admin:admin@192.168.71.22/0",
+	"rtsp://admin:admin@192.168.71.23/0",
+	"rtsp://admin:admin@192.168.71.24/0",
+	"rtsp://admin:admin@192.168.71.25/0"
+	],
+	outputs = [
+	"001",
+	"002",
+	"003",
+	"004"
+	],
+	totalchildren = inputs.length,
+	children = new Array(totalchildren),
+	loop = undefined;
+
+var checker = function() {
+	loop = setInterval( function() {
+		for (var i = 0; i < totalchildren; i++) {
+			if (children[i] == undefined) {
+				callFFmpeg( i, inputs[i], outputs[i]);
+			}
+		};
+	}, 1000);
+}
 
 var	rate = 4,
 		suffixout = 'camaraip',
 		outextension = 'jpg';
 
-function callFFmpeg (input, prefixout) {
+function callFFmpeg (i, input, prefixout) {
 
 	/**
 	 * Variables for FFmpeg
 	 **/
 	var util = require('util'),
 			exec = require('child_process').exec,
-			child,
 			rate = 4, // Video FPS rate.
 			quality = 'qvga', // Quality of the image
 			extraparams = '-b:v 32k',
@@ -153,13 +173,28 @@ function callFFmpeg (input, prefixout) {
 	/**
 	 * Call to FFmpeg
 	 **/
-	child = exec('ffmpeg -loglevel quiet -i ' + input + ' -r ' + rate + ' -s ' + quality + ' ' + extraparams + ' -f image2 -updatefirst 1 ' + basedir + imgdir + prefixout + '_' + suffixout + '.' + outextension, {maxBuffer: 2048*1024},
+	children[i] = exec('ffmpeg -loglevel quiet -i ' + input + ' -r ' + rate + ' -s ' + quality + ' ' + extraparams + ' -f image2 -updatefirst 1 ' + basedir + imgdir + prefixout + '_' + suffixout + '.' + outextension, {maxBuffer: 2048*1024},
 		function (error, stdout, stderr) {
 			if (error !== null) {
 				console.error('FFmpeg\'s ' + prefixout + ' exec error: ' + error);
 			}
 	});
+
+	children[i].on('exit', function (code) {
+		console.log('FFmpeg child: ' + inputs[i] + ' exited and is being re-launched');
+		children[i] = undefined;
+	});
+	children[i].on('SIGTERM', function() {
+		console.log('FFmpeg child: ' + inputs[i] + ' got terminated and is being re-launched');
+		children[i] = undefined;
+	});
 }
+
+
+/**
+ * Calling checker()
+ **/
+checker();
 
 /**
  * Calling function `callSocket` to get Socket.IO running
