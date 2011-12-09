@@ -153,7 +153,7 @@ function callFFmpeg (input, prefixout) {
 	/**
 	 * Call to FFmpeg
 	 **/
-	child = exec('ffmpeg -i ' + input + ' -r ' + rate + ' -s ' + quality + ' ' + extraparams + ' -f image2 -updatefirst 1 ' + basedir + imgdir + prefixout + '_' + suffixout + '.' + outextension, {maxBuffer: 500*1024},
+	child = exec('ffmpeg -i ' + input + ' -r ' + rate + ' -s ' + quality + ' ' + extraparams + ' -f image2 -updatefirst 1 ' + basedir + imgdir + prefixout + '_' + suffixout + '.' + outextension, {maxBuffer: 2048*1024},
 		function (error, stdout, stderr) {
 			if (error !== null) {
 				console.error('FFmpeg\'s ' + prefixout + ' exec error: ' + error);
