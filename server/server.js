@@ -122,6 +122,18 @@ http.get('/iribarren.jpg', function (req, res) {
 http.get('/amtt.png', function(req, res) {
 	res.sendfile(path.normalize(basedir) + '/client/amtt.png');
 });
+http.get('/001.jpg', function(req, res) {
+	res.sendfile(path.normalize(basedir) + '/img/001_camaraip.jpg');
+});
+http.get('/002.jpg', function(req, res) {
+	res.sendfile(path.normalize(basedir) + '/img/002_camaraip.jpg');
+});
+http.get('/003.jpg', function(req, res) {
+	res.sendfile(path.normalize(basedir) + '/img/003_camaraip.jpg');
+});
+http.get('/004.jpg', function(req, res) {
+	res.sendfile(path.normalize(basedir) + '/img/004_camaraip.jpg');
+});
 
 /**
  * Declaring inputs and outputs for the cameras
@@ -140,7 +152,8 @@ var inputs = [
 	],
 	totalchildren = inputs.length,
 	children = new Array(totalchildren),
-	loop = undefined;
+	loop = undefined,
+	frequency=10;
 
 var checker = function() {
 	loop = setInterval( function() {
@@ -149,7 +162,7 @@ var checker = function() {
 				callFFmpeg( i, inputs[i], outputs[i]);
 			}
 		};
-	}, 1000);
+	}, frequency*1000);
 }
 
 var	rate = 4,
