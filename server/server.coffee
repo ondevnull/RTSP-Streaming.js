@@ -48,20 +48,11 @@ fs = require("fs")
 path = require("path")
 
 users = [
-  username: "alcaldia"
-  password: "amalia saez"
+  username: "test"
+  password: "test"
 ,
-  username: "desur"
-  password: "cedeno"
-,
-  username: "jorge"
-  password: "una contrasena muy fuerte"
-,
-  username: "sts"
-  password: "sin contrasena"
-,
-  username: "amtt"
-  password: "amtt"
+  username: "second"
+  password: "second"
  ]
 passport.use new DigestStrategy(
   qop: "auth"
