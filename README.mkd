@@ -39,7 +39,12 @@ After the building completes, you will have a lot of files on `../`, you should 
 
 How to use?
 -----------
-TODO TODO TODO TODO TODO TODO TODO TODO
+
+You need ffmpeg installed;
+
+Run node server/server.js it will fire the web client on port 8081.
+
+Sources at listed from line 141 on server/server.js and those are streamed to websockets. on channels 001, 002, 003, 004.
 
 Author, Copyright & License
 ---------------------------
